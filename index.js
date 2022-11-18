@@ -1,23 +1,19 @@
-const { createStore, combineReducers } = require("redux");
+const { createStore, applyMiddleware } = require("redux");
+const { default: logger } = require("redux-logger");
 
 
 // =================>>> constains <<<========================
 const ADD_PRODUCT = 'ADD_PRODUCT';
 const GET_PRODUCT = 'GET_PRODUCT';
 
-const ADD_CART='ADD_CART'
-const GET_CHART = 'GET_CHART';
 
 
-// =================>>> states <<<========================
+// =================>>> actions <<<========================
 const initialState = {
     count: 2,
     product: ['pen', 'watch']
 }
-const initialCartState = {
-    count: 1,
-    cart: ['Meat']
-}
+
 // =================>>> actions <<<========================
 const addProductAction = (productName) => {
     return {
@@ -33,21 +29,6 @@ const getProductAction = () => {
     }
 }
 
-
-
-const addCartAction = (cartName) => {
-    return {
-        type: ADD_CART,
-        payload: cartName
-    }
-}
-
-const getCartAction = () => {
-    return {
-        type: GET_CHART,
-
-    }
-}
 
 
 // =================>>> reducer <<<========================
@@ -67,41 +48,13 @@ const productReducer = (state = initialState, action) => {
     }
 }
 
+//store (getState, dispatch, subscripe)
 
-const cartReducer = (state = initialCartState, action) => {
-    switch (action.type) {
-        case GET_CHART:
-            return { ...state };
-
-        case ADD_CART:
-            return {
-                count: state.count + 1,
-                cart: [...state.cart, action.payload]
-            }
-            default:
-                return state
-    }
-}
-
-
-//=================>>>store (getState, dispatch, subscripe)<<<=====================
-
-
-//combine reducers
-const rootReducer=combineReducers({
-    productReducer,
-    cartReducer
-})
-
-const store = createStore(rootReducer);
+const store = createStore(productReducer,applyMiddleware(logger));
 
 
 store.subscribe(() => {
-    console.log('===>',store.getState());
+    console.log(store.getState());
 })
 
-
-store.dispatch(addProductAction('mobile'));
-store.dispatch(getProductAction());
-store.dispatch(addCartAction('fish'));
-store.dispatch(getCartAction());
+store.dispatch(addProductAction('book'));
