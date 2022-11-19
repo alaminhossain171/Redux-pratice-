@@ -1,5 +1,8 @@
-const { createStore } = require("redux");
-const { counterReducer } = require("../reducers/counterReducer");
+import thunk from "redux-thunk";
+import { fetchReducer } from "../reducers/fetchReducer";
 
-const store=createStore(counterReducer);
+const { createStore, applyMiddleware } = require("redux");
+
+
+const store=createStore(fetchReducer,applyMiddleware(thunk));
 export default store;
